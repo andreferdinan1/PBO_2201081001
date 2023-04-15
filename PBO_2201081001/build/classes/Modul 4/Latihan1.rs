@@ -1,1 +1,0 @@
-andreferdinan090323.Latihan1
