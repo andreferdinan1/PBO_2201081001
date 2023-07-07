@@ -5,13 +5,17 @@
 package andre.view;
 
 import andre.controller.PeminjamanController;
+import java.text.ParseException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 
 /**
  *
- * @author Dell
+ * @author andreferdinan
  */
 public class FormPeminjaman extends javax.swing.JFrame {
 
@@ -19,11 +23,12 @@ public class FormPeminjaman extends javax.swing.JFrame {
      * Creates new form FormPeminjaman
      */
     PeminjamanController controller;
-    public FormPeminjaman() {
+    public FormPeminjaman() throws ParseException {
         initComponents();
         controller = new PeminjamanController(this);
         controller.clearForm();
         controller.tampil();
+        controller.isiCombo();
     }
 
     public JTable getTabelPeminjaman() {
@@ -34,22 +39,22 @@ public class FormPeminjaman extends javax.swing.JFrame {
         this.TabelPeminjaman = TabelPeminjaman;
     }
 
-    public JTextField getTxtKodeAnggota() {
-        return TxtKodeAnggota;
+    public JComboBox<String> getCboAnggota() {
+        return cboAnggota;
     }
 
-    public void setTxtKodeAnggota(JTextField TxtKodeAnggota) {
-        this.TxtKodeAnggota = TxtKodeAnggota;
+    public void setCboAnggota(JComboBox<String> cboAnggota) {
+        this.cboAnggota = cboAnggota;
     }
 
-    public JTextField getTxtKodeBuku() {
-        return TxtKodeBuku;
+    public JComboBox<String> getCboBuku() {
+        return cboBuku;
     }
 
-    public void setTxtKodeBuku(JTextField TxtKodeBuku) {
-        this.TxtKodeBuku = TxtKodeBuku;
+    public void setCboBuku(JComboBox<String> cboBuku) {
+        this.cboBuku = cboBuku;
     }
-
+    
     public JTextField getTxtTanggalKembali() {
         return TxtTanggalKembali;
     }
@@ -112,10 +117,10 @@ public class FormPeminjaman extends javax.swing.JFrame {
         btnUpdate = new javax.swing.JButton();
         btnDelete = new javax.swing.JButton();
         btnCancel = new javax.swing.JButton();
-        TxtKodeAnggota = new javax.swing.JTextField();
-        TxtKodeBuku = new javax.swing.JTextField();
         TxtTanggalPinjam = new javax.swing.JTextField();
         TxtTanggalKembali = new javax.swing.JTextField();
+        cboAnggota = new javax.swing.JComboBox<>();
+        cboBuku = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -129,17 +134,17 @@ public class FormPeminjaman extends javax.swing.JFrame {
 
         TabelPeminjaman.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "Kode Anggota", "Kode Buku", "Tanggal Pinjam", "Tanggal Kembali"
+                "Kode Anggota", "Kode Buku", "Tanggal Peminjaman", "Tanggal Kembali", "Selisih"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -181,15 +186,17 @@ public class FormPeminjaman extends javax.swing.JFrame {
             }
         });
 
-        TxtKodeAnggota.addActionListener(new java.awt.event.ActionListener() {
+        cboAnggota.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cboAnggota.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                TxtKodeAnggotaActionPerformed(evt);
+                cboAnggotaActionPerformed(evt);
             }
         });
 
-        TxtKodeBuku.addActionListener(new java.awt.event.ActionListener() {
+        cboBuku.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cboBuku.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                TxtKodeBukuActionPerformed(evt);
+                cboBukuActionPerformed(evt);
             }
         });
 
@@ -215,8 +222,11 @@ public class FormPeminjaman extends javax.swing.JFrame {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(TxtTanggalKembali)
                                     .addComponent(TxtTanggalPinjam)
-                                    .addComponent(TxtKodeBuku)
-                                    .addComponent(TxtKodeAnggota)))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(cboBuku, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(cboAnggota, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(0, 0, Short.MAX_VALUE))))
                             .addGroup(layout.createSequentialGroup()
                                 .addContainerGap()
                                 .addComponent(btnInsert)
@@ -233,14 +243,13 @@ public class FormPeminjaman extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(TxtKodeAnggota, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel2))
-                    .addComponent(TxtKodeBuku, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(cboAnggota, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(cboBuku, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
@@ -257,39 +266,44 @@ public class FormPeminjaman extends javax.swing.JFrame {
                     .addComponent(btnCancel))
                 .addGap(26, 26, 26)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(130, Short.MAX_VALUE))
+                .addContainerGap(124, Short.MAX_VALUE))
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
-
-    private void TxtKodeAnggotaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TxtKodeAnggotaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_TxtKodeAnggotaActionPerformed
-
-    private void TxtKodeBukuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TxtKodeBukuActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_TxtKodeBukuActionPerformed
 
     private void btnInsertActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInsertActionPerformed
         // TODO add your handling code here:
         controller.insert();
         controller.clearForm();
-        controller.tampil();
+        try {
+            controller.tampil();
+        } catch (ParseException ex) {
+            Logger.getLogger(FormPeminjaman.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnInsertActionPerformed
 
     private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
         // TODO add your handling code here:
         controller.update();
         controller.clearForm();
-        controller.tampil();
+        try {
+            controller.tampil();
+        } catch (ParseException ex) {
+            Logger.getLogger(FormPeminjaman.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnUpdateActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         // TODO add your handling code here:
          controller.delete();
         controller.clearForm();
-        controller.tampil();
+        try {
+            controller.tampil();
+        } catch (ParseException ex) {
+            Logger.getLogger(FormPeminjaman.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_btnDeleteActionPerformed
 
     private void btnCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelActionPerformed
@@ -299,9 +313,18 @@ public class FormPeminjaman extends javax.swing.JFrame {
 
     private void TabelPeminjamanMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TabelPeminjamanMouseClicked
         // TODO add your handling code here:
-        controller.getPeminjaman();
     }//GEN-LAST:event_TabelPeminjamanMouseClicked
 
+    private void cboAnggotaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboAnggotaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cboAnggotaActionPerformed
+
+    private void cboBukuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboBukuActionPerformed
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_cboBukuActionPerformed
+
+    
     /**
      * @param args the command line arguments
      */
@@ -332,21 +355,25 @@ public class FormPeminjaman extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new FormPeminjaman().setVisible(true);
+                try {
+                    new FormPeminjaman().setVisible(true);
+                } catch (ParseException ex) {
+                    Logger.getLogger(FormPeminjaman.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable TabelPeminjaman;
-    private javax.swing.JTextField TxtKodeAnggota;
-    private javax.swing.JTextField TxtKodeBuku;
     private javax.swing.JTextField TxtTanggalKembali;
     private javax.swing.JTextField TxtTanggalPinjam;
     private javax.swing.JButton btnCancel;
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnInsert;
     private javax.swing.JButton btnUpdate;
+    private javax.swing.JComboBox<String> cboAnggota;
+    private javax.swing.JComboBox<String> cboBuku;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

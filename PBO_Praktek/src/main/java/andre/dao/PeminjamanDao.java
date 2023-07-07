@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  *
- * @author Dell
+ * @author andreferdinan
  */
 public interface PeminjamanDao {
         void insert(Peminjaman peminjaman);
